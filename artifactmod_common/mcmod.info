@@ -1,0 +1,21 @@
+[
+{
+	"modid": "artifactmod",
+	"name": "The Artifact Mod",
+	"description": "",
+	"version": "",
+	"url": "",
+	"updateUrl": "",
+	"authorList": [
+		"CyrusDragonas",
+		"Eearslya"
+	],
+	"credits": "",
+	"logoFile": "",
+	"screenshots": [
+	],
+	"parent": "",
+	"dependencies": [
+	]
+}
+]
