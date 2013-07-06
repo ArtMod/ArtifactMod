@@ -9,6 +9,9 @@ public class RefStrings {
     // Tile Entity IDs
     public static final String TE_ARTIFACT_CASE_ID = "artifactCase";
     
-    // Names
-    public static final String ARTIFACT_CASE_NAME = "Artifact Case";
+    // Block Names
+	public static final String BLOCK_STONE_DECORATIVE_BRICK = "Dungeon Brick";
+	public static final String BLOCK_STONE_DECORATIVE_PATTERN = "Dungeon Pattern";
+    public static final String BLOCK_STONE_DECORATIVE_PATTERNMOSS = "Mossy Dungeon Pattern";
+	public static final String BLOCK_ARTIFACT_CASE = "Artifact Case";
 }

@@ -100,17 +100,17 @@ public class ArtifactMod {
     	
     	// Add in-game names for Blocks
     	// @TODO Organize all names in reference file
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 0), "Dungeon Brick");
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 1), "Dungeon Brick");
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 2), "Dungeon Brick");
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 3), "Dungeon Brick");
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 4), "Mossy Dungeon Pattern");
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 5), "Mossy Dungeon Pattern");
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 6), "Dungeon Pattern");
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 7), "Dungeon Pattern");
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 8), "Dungeon Pattern");
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 9), "Dungeon Pattern");
-    	LanguageRegistry.addName(blockArtifactCase, RefStrings.ARTIFACT_CASE_NAME);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 0), RefStrings.BLOCK_STONE_DECORATIVE_BRICK);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 1), RefStrings.BLOCK_STONE_DECORATIVE_BRICK);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 2), RefStrings.BLOCK_STONE_DECORATIVE_BRICK);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 3), RefStrings.BLOCK_STONE_DECORATIVE_BRICK);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 4), RefStrings.BLOCK_STONE_DECORATIVE_PATTERNMOSS);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 5), RefStrings.BLOCK_STONE_DECORATIVE_PATTERNMOSS);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 6), RefStrings.BLOCK_STONE_DECORATIVE_PATTERN);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 7), RefStrings.BLOCK_STONE_DECORATIVE_PATTERN);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 8), RefStrings.BLOCK_STONE_DECORATIVE_PATTERN);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 9), RefStrings.BLOCK_STONE_DECORATIVE_PATTERN);
+    	LanguageRegistry.addName(blockArtifactCase, RefStrings.BLOCK_ARTIFACT_CASE);
     	
     	// Add in-game names for Items
     	LanguageRegistry.addName(new ItemStack(itemArtifact, 1, 0), "White Artifact");

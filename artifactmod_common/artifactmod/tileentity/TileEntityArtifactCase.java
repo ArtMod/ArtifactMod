@@ -78,7 +78,7 @@ public class TileEntityArtifactCase extends TileEntity implements IInventory {
 		/*
 		 * Returns the name of the inventory.
 		 */
-		return RefStrings.ARTIFACT_CASE_NAME;
+		return RefStrings.BLOCK_ARTIFACT_CASE;
 	}
 
 	@Override
