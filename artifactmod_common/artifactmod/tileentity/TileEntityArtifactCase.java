@@ -9,7 +9,6 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
-import artifactmod.ArtifactMod;
 import artifactmod.ref.RefStrings;
 
 public class TileEntityArtifactCase extends TileEntity implements IInventory {
@@ -19,8 +18,8 @@ public class TileEntityArtifactCase extends TileEntity implements IInventory {
 	public static final int INVENTORY_SIZE = 1;
 	
 	public TileEntityArtifactCase() {
+		// Initialize inventory to the proper size
 		this.inventory = new ItemStack[INVENTORY_SIZE];
-		//this.inventory[0] = new ItemStack(ArtifactMod.itemArtifact, 1, 5);
 	}
 
 	@Override
@@ -35,14 +34,18 @@ public class TileEntityArtifactCase extends TileEntity implements IInventory {
 
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
+		/*
+		 * Decreases the number of items in a specified slot by a specified amount, if possible.
+		 * @return The itemStack with the specified amount of items
+		 */
 		ItemStack itemStack = getStackInSlot(slot);
 		if (itemStack != null) {
-			if (itemStack.stackSize <= amount) {
+			if (itemStack.stackSize <= amount) {	// If the amount is greater than or equal to what the slot has, remove the slot entirely
 				setInventorySlotContents(slot, null);
 			}
 			else {
 				itemStack = itemStack.splitStack(amount);
-				if (itemStack.stackSize == 0) {
+				if (itemStack.stackSize == 0) {	// If splitting the stack left the original with 0, destroy the stack
 					setInventorySlotContents(slot, null);
 				}
 			}
@@ -61,6 +64,9 @@ public class TileEntityArtifactCase extends TileEntity implements IInventory {
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemStack) {
+		/*
+		 * Sets the specified inventory slot to hold the specified itemstack, if the itemstack is not null and not greater than its capacity.
+		 */
 		inventory[i] = itemStack;
 		if (itemStack != null && itemStack.stackSize > getInventoryStackLimit()) {
 			itemStack.stackSize = getInventoryStackLimit();
@@ -69,16 +75,23 @@ public class TileEntityArtifactCase extends TileEntity implements IInventory {
 
 	@Override
 	public String getInvName() {
+		/*
+		 * Returns the name of the inventory.
+		 */
 		return RefStrings.ARTIFACT_CASE_NAME;
 	}
 
 	@Override
 	public boolean isInvNameLocalized() {
+		/*
+		 * Used to check if the inventory name is in the local language or not.
+		 */
 		return false;
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
+		// We only want to hold one item.
 		return 1;
 	}
 
@@ -103,6 +116,7 @@ public class TileEntityArtifactCase extends TileEntity implements IInventory {
 	}
 	
 	public Packet getDescriptionPacket() {
+		// Allows updating of the inventory so when an artifact is placed or removed, the client is notified.
 		NBTTagCompound nbtTag = new NBTTagCompound();
 		this.writeToNBT(nbtTag);
 		return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 1, nbtTag);
@@ -114,6 +128,7 @@ public class TileEntityArtifactCase extends TileEntity implements IInventory {
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
+		// Read from the save data to load any artifact, if stored
 		super.readFromNBT(nbtTagCompound);
 		NBTTagList tagList = nbtTagCompound.getTagList("Items");
 		inventory = new ItemStack[this.getSizeInventory()];
@@ -128,6 +143,7 @@ public class TileEntityArtifactCase extends TileEntity implements IInventory {
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
+		// Save the artifact within, if any
 		super.writeToNBT(nbtTagCompound);
 		NBTTagList tagList = new NBTTagList();
 		for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
