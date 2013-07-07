@@ -1,25 +1,80 @@
 package artifactmod.tileentity;
 
+import artifactmod.ArtifactMod;
+import artifactmod.ref.RefStrings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
-import artifactmod.ref.RefStrings;
 
-public class TileEntityArtifactCase extends TileEntity implements IInventory {
-
+public class TileEntityOrichalcumReceptacle extends TileEntity implements IInventory {
+	
+	/**
+	 * The amount of orichalcum energy remaining.
+	 */
+	private int fuel;
+	
 	private ItemStack[] inventory;
 	
-	public static final int INVENTORY_SIZE = 1;
+	/**
+	 * Amount of energy to add per orichalcum, also the capacity.
+	 */
+	public static int maxFuel = 1200;
 	
-	public TileEntityArtifactCase() {
-		// Initialize inventory to the proper size
-		this.inventory = new ItemStack[INVENTORY_SIZE];
+	public TileEntityOrichalcumReceptacle() {
+		inventory = new ItemStack[1];
+		inventory[0] = new ItemStack(ArtifactMod.itemArtifactPick, 1);
+	}
+	
+	/**
+	 * @return Current fuel level
+	 */
+	public int getFuelLevel() {
+		return this.fuel;
+	}
+	
+	/**
+	 * Used to set the fuel level, with a maximum of {@code maxFuel}
+	 * @param par1 Fuel level to set
+	 */
+	public void setFuelLevel(int par1) {
+		if (par1 > this.maxFuel) par1 = 1200;
+		this.fuel = par1;
+	}
+	
+	/**
+	 * Allows updating of the block so when fuel level changes, the client is notified.
+	 */
+	public Packet getDescriptionPacket() {
+		NBTTagCompound nbtTag = new NBTTagCompound();
+		this.writeToNBT(nbtTag);
+		return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 1, nbtTag);
+	}
+
+	public void onDataPacket(INetworkManager net, Packet132TileEntityData packet) {
+		readFromNBT(packet.customParam1);
+	}
+	
+	/**
+	 * Read from the save data to load any fuel
+	 */
+	@Override
+	public void readFromNBT(NBTTagCompound nbtTagCompound) {
+		super.readFromNBT(nbtTagCompound);
+		fuel = nbtTagCompound.getInteger("fuel");
+	}
+
+	/**
+	 * Save the fuel within
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound nbtTagCompound) {
+		super.writeToNBT(nbtTagCompound);
+		nbtTagCompound.setInteger("fuel", fuel);
 	}
 
 	@Override
@@ -78,7 +133,7 @@ public class TileEntityArtifactCase extends TileEntity implements IInventory {
 	 */
 	@Override
 	public String getInvName() {
-		return RefStrings.BLOCK_ARTIFACTCASE;
+		return RefStrings.BLOCK_ORICHALCUMRECEPTACLE;
 	}
 
 	/**
@@ -113,51 +168,5 @@ public class TileEntityArtifactCase extends TileEntity implements IInventory {
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
 		return true;
-	}
-	
-	public Packet getDescriptionPacket() {
-		// Allows updating of the inventory so when an artifact is placed or removed, the client is notified.
-		NBTTagCompound nbtTag = new NBTTagCompound();
-		this.writeToNBT(nbtTag);
-		return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 1, nbtTag);
-	}
-
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData packet) {
-		readFromNBT(packet.customParam1);
-	}
-	
-	/**
-	 * Read from the save data to load any artifact, if stored
-	 */
-	@Override
-	public void readFromNBT(NBTTagCompound nbtTagCompound) {
-		super.readFromNBT(nbtTagCompound);
-		NBTTagList tagList = nbtTagCompound.getTagList("Items");
-		inventory = new ItemStack[this.getSizeInventory()];
-		for (int i = 0; i < tagList.tagCount(); ++i) {
-			NBTTagCompound tagCompound = (NBTTagCompound) tagList.tagAt(i);
-			byte slot = tagCompound.getByte("Slot");
-			if (slot >= 0 && slot < inventory.length) {
-				inventory[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
-			}
-		}
-	}
-
-	/**
-	 * Save the artifact within, if any
-	 */
-	@Override
-	public void writeToNBT(NBTTagCompound nbtTagCompound) {
-		super.writeToNBT(nbtTagCompound);
-		NBTTagList tagList = new NBTTagList();
-		for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
-			if (inventory[currentIndex] != null) {
-				NBTTagCompound tagCompound = new NBTTagCompound();
-				tagCompound.setByte("Slot", (byte) currentIndex);
-				inventory[currentIndex].writeToNBT(tagCompound);
-				tagList.appendTag(tagCompound);
-			}
-		}
-		nbtTagCompound.setTag("Items", tagList);
 	}
 }

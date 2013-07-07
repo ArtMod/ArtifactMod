@@ -14,6 +14,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockDecorative extends Block {
 
+	/**
+	 * Array of icons used to render the block
+	 */
 	@SideOnly(Side.CLIENT)
 	private Icon[] icons;
 	
@@ -22,6 +25,9 @@ public class BlockDecorative extends Block {
 		this.setCreativeTab(CreativeTabs.tabBlock);
 	}
 	
+	/**
+	 * Load all the icons needed to render the blocks
+	 */
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
@@ -33,17 +39,27 @@ public class BlockDecorative extends Block {
 		}
 	}
 	
+	/**
+	 * Decides the metadata of the block to drop
+	 */
 	@Override
 	public int damageDropped(int metadata) {
 		return metadata;
 	}
 	
+	/**
+	 * Decides what Icon to use to render a block, dependent on its metadata.
+	 * @return The Icon to render the block
+	 */
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int side, int metadata) {
 		return icons[metadata];
 	}
 	
+	/**
+	 * Populates a list of each type of sub-block this block implements
+	 */
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) {

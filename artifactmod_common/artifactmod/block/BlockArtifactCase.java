@@ -9,7 +9,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import artifactmod.ref.RefStrings;
 import artifactmod.tileentity.TileEntityArtifactCase;
@@ -24,14 +23,16 @@ public class BlockArtifactCase extends Block implements ITileEntityProvider {
 		this.setHardness(0.3F);
 	}
 
+	/**
+	 * Attaches the tile entity to the block.
+	 */
 	public TileEntity createNewTileEntity(World world) {
 		return new TileEntityArtifactCase();
 	}
-
-	public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l) {
-		return true;
-	}
 	
+	/**
+	 * Called when the block is right clicked. If the player has an empty hand, the Artifact Case will give them the item.
+	 */
 	@Override
 	public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9) {
 		TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
@@ -50,6 +51,9 @@ public class BlockArtifactCase extends Block implements ITileEntityProvider {
 		return false;
 	}
 	
+	/**
+	 * Called just before the block is destroyed. If an artifact is within, it will be ejected into the world.
+	 */
 	public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6) {
 		TileEntityArtifactCase caseBlock = (TileEntityArtifactCase) par1World.getBlockTileEntity(par2, par3, par4);
 		
@@ -62,24 +66,27 @@ public class BlockArtifactCase extends Block implements ITileEntityProvider {
 		super.breakBlock(par1World, par2, par3, par4, par5, par6);
 	}
 
+	/**
+	 * Set the texture for the block
+	 */
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
 		this.blockIcon = par1IconRegister.registerIcon(RefStrings.MOD_ID + ":" + this.getUnlocalizedName().substring(5));
 	}
 
+	/**
+	 * Returns false to allow adjacent blocks to render, making the block transparent.
+	 */
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
 
+	/**
+	 * Returns false to allow a custom renderer.
+	 */
 	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
-
-	@Override
-	public int getRenderType() {
-		return 0;
-	}
-
 }

@@ -10,21 +10,22 @@ public class ItemBlockDecorative extends ItemBlock {
 		setHasSubtypes(true); // This block has multiple types
 	}
 	
+	/**
+	 * Returns a unique name for each type of block, using the unlocalized name and metadata.
+	 * @param itemStack The ItemStack to identify
+	 * @return "unlocalizedName.metadata" ex. "blockStoneDecorative.3"
+	 */
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack) {
-		/*
-		 * Returns a unique name for each type of block, using the unlocalized name and metadata.
-		 * @param itemStack The ItemStack to identify
-		 * @return "unlocalizedName.metadata" ex. "blockStoneDecorative.3"
-		 */
 		int metadata = itemStack.getItemDamage();
 		return getUnlocalizedName() + "." + metadata;
 	}
 	
+	/**
+	 * Used to set the metadata of the block when placed in the world.
+	 * @return The metadata to place on the in-world block
+	 */
 	public int getMetadata(int par1) {
-		/*
-		 * Used to set the metadata of the block when placed in the world.
-		 */
 		return par1;
 	}
 
