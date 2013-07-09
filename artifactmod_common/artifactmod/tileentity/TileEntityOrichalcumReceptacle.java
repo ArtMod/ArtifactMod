@@ -1,7 +1,5 @@
 package artifactmod.tileentity;
 
-import artifactmod.ArtifactMod;
-import artifactmod.ref.RefStrings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -10,6 +8,7 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
+import artifactmod.ref.BlockName;
 
 public class TileEntityOrichalcumReceptacle extends TileEntity implements IInventory {
 	
@@ -18,7 +17,15 @@ public class TileEntityOrichalcumReceptacle extends TileEntity implements IInven
 	 */
 	private int fuel;
 	
-	private ItemStack[] inventory;
+	/**
+	 * Indicates whether the repair device is on or not
+	 */
+	public boolean isActive;
+	
+	/**
+	 * The tool the receptacle currently holds
+	 */
+	private ItemStack inventory;
 	
 	/**
 	 * Amount of energy to add per orichalcum, also the capacity.
@@ -26,8 +33,8 @@ public class TileEntityOrichalcumReceptacle extends TileEntity implements IInven
 	public static int maxFuel = 1200;
 	
 	public TileEntityOrichalcumReceptacle() {
-		inventory = new ItemStack[1];
-		inventory[0] = new ItemStack(ArtifactMod.itemArtifactPick, 1);
+		// Debug Line
+		//inventory = new ItemStack(ArtifactMod.itemArtifactPick, 1);
 	}
 	
 	/**
@@ -35,6 +42,23 @@ public class TileEntityOrichalcumReceptacle extends TileEntity implements IInven
 	 */
 	public int getFuelLevel() {
 		return this.fuel;
+	}
+	
+	/**
+	 * Triggered every tick, keeps track of fuel usage
+	 */
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+		if (this.isActive) {
+			this.fuel -= 1;
+			// @TODO Updating block does not work
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			if (this.fuel <= 0) {
+				this.fuel = 0;
+				this.isActive = false;
+			}
+		}
 	}
 	
 	/**
@@ -79,12 +103,13 @@ public class TileEntityOrichalcumReceptacle extends TileEntity implements IInven
 
 	@Override
 	public int getSizeInventory() {
-		return this.inventory.length;
+		return 1;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return this.inventory[i];
+		if (i > 0) return null;
+		return this.inventory;
 	}
 
 	/**
@@ -93,6 +118,7 @@ public class TileEntityOrichalcumReceptacle extends TileEntity implements IInven
 	 */
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
+		if (slot > 0) return null;
 		ItemStack itemStack = getStackInSlot(slot);
 		if (itemStack != null) {
 			if (itemStack.stackSize <= amount) {	// If the amount is greater than or equal to what the slot has, remove the slot entirely
@@ -110,6 +136,7 @@ public class TileEntityOrichalcumReceptacle extends TileEntity implements IInven
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i) {
+		if (i > 0) return null;
 		ItemStack itemStack = getStackInSlot(i);
 		if (itemStack != null) {
 			setInventorySlotContents(i, null);
@@ -122,7 +149,8 @@ public class TileEntityOrichalcumReceptacle extends TileEntity implements IInven
 	 */
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemStack) {
-		inventory[i] = itemStack;
+		if (i > 0) return;
+		inventory = itemStack;
 		if (itemStack != null && itemStack.stackSize > getInventoryStackLimit()) {
 			itemStack.stackSize = getInventoryStackLimit();
 		}
@@ -133,7 +161,7 @@ public class TileEntityOrichalcumReceptacle extends TileEntity implements IInven
 	 */
 	@Override
 	public String getInvName() {
-		return RefStrings.BLOCK_ORICHALCUMRECEPTACLE;
+		return BlockName.BLOCK_ORICHALCUMRECEPTACLE;
 	}
 
 	/**

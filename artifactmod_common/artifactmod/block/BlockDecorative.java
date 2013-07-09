@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
-import artifactmod.ref.RefStrings;
+import artifactmod.ref.ModInfo;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -34,7 +34,7 @@ public class BlockDecorative extends Block {
 		icons = new Icon[10];
 		
 		for (int i = 0; i < icons.length; i++) {
-			String tmp = RefStrings.MOD_ID + ":" + (this.getUnlocalizedName().substring(5) + i);
+			String tmp = ModInfo.MOD_ID + ":" + (this.getUnlocalizedName().substring(5) + i);
 			icons[i] = par1IconRegister.registerIcon(tmp);
 		}
 	}

@@ -15,7 +15,7 @@ public class ClientProxy extends CommonProxy {
 	}
 	
 	public static void setCustomRenderers() {
-		// Register special renderer for the Artifact case
+		// Register special renderers
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityArtifactCase.class, new TileEntityArtifactCaseRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOrichalcumReceptacle.class, new TileEntityOrichalcumReceptacleRenderer());
 	}

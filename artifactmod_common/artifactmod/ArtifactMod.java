@@ -14,7 +14,10 @@ import artifactmod.item.ItemArtifactPick;
 import artifactmod.item.ItemBlockDecorative;
 import artifactmod.item.ItemDiviningStone;
 import artifactmod.item.ItemMisc;
-import artifactmod.ref.RefStrings;
+import artifactmod.ref.BlockName;
+import artifactmod.ref.ItemName;
+import artifactmod.ref.ModInfo;
+import artifactmod.ref.TileEntityId;
 import artifactmod.tileentity.TileEntityArtifactCase;
 import artifactmod.tileentity.TileEntityOrichalcumReceptacle;
 import cpw.mods.fml.common.Mod;
@@ -29,9 +32,9 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 // Identify this class as a Minecraft Forge Mod
 @Mod(
-        modid = RefStrings.MOD_ID,
-        name = RefStrings.MOD_NAME,
-        version = RefStrings.MOD_VERSION)
+        modid = ModInfo.MOD_ID,
+        name = ModInfo.MOD_NAME,
+        version = ModInfo.MOD_VERSION)
 
 // Declare client/server relationship rules
 @NetworkMod(
@@ -96,13 +99,13 @@ public class ArtifactMod {
     	config.save();
     	
     	// Register blocks with the game
-    	GameRegistry.registerBlock(blockStoneDecorative, ItemBlockDecorative.class, RefStrings.MOD_ID + (blockStoneDecorative.getUnlocalizedName().substring(5)));
-    	GameRegistry.registerBlock(blockArtifactCase, RefStrings.MOD_ID + (blockArtifactCase.getUnlocalizedName().substring(5)));
-    	GameRegistry.registerBlock(blockOrichalcumReceptacle, RefStrings.MOD_ID + (blockOrichalcumReceptacle.getUnlocalizedName().substring(5)));
+    	GameRegistry.registerBlock(blockStoneDecorative, ItemBlockDecorative.class, ModInfo.MOD_ID + (blockStoneDecorative.getUnlocalizedName().substring(5)));
+    	GameRegistry.registerBlock(blockArtifactCase, ModInfo.MOD_ID + (blockArtifactCase.getUnlocalizedName().substring(5)));
+    	GameRegistry.registerBlock(blockOrichalcumReceptacle, ModInfo.MOD_ID + (blockOrichalcumReceptacle.getUnlocalizedName().substring(5)));
     	
     	// Register tile entities
-    	GameRegistry.registerTileEntity(TileEntityArtifactCase.class, RefStrings.TE_ARTIFACTCASE_ID);
-    	GameRegistry.registerTileEntity(TileEntityOrichalcumReceptacle.class, RefStrings.TE_ORICHALCUMRECEPTACLE_ID);
+    	GameRegistry.registerTileEntity(TileEntityArtifactCase.class, TileEntityId.TE_ARTIFACTCASE_ID);
+    	GameRegistry.registerTileEntity(TileEntityOrichalcumReceptacle.class, TileEntityId.TE_ORICHALCUMRECEPTACLE_ID);
     	
     	// Register recipes
     	ItemStack recipe_keyFragment = new ItemStack(itemMisc, 1, ItemMisc.KEYFRAGMENT);
@@ -130,30 +133,31 @@ public class ArtifactMod {
     	
     	// Add in-game names for Blocks
     	// @TODO Organize all names in reference file
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 0), RefStrings.BLOCK_STONE_DECORATIVE_BRICK);
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 1), RefStrings.BLOCK_STONE_DECORATIVE_BRICK);
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 2), RefStrings.BLOCK_STONE_DECORATIVE_BRICK);
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 3), RefStrings.BLOCK_STONE_DECORATIVE_BRICK);
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 4), RefStrings.BLOCK_STONE_DECORATIVE_PATTERNMOSS);
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 5), RefStrings.BLOCK_STONE_DECORATIVE_PATTERNMOSS);
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 6), RefStrings.BLOCK_STONE_DECORATIVE_PATTERN);
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 7), RefStrings.BLOCK_STONE_DECORATIVE_PATTERN);
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 8), RefStrings.BLOCK_STONE_DECORATIVE_DARK);
-    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 9), RefStrings.BLOCK_STONE_DECORATIVE_DARK);
-    	LanguageRegistry.addName(blockArtifactCase, RefStrings.BLOCK_ARTIFACTCASE);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 0), BlockName.BLOCK_STONE_DECORATIVE_BRICK);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 1), BlockName.BLOCK_STONE_DECORATIVE_BRICK);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 2), BlockName.BLOCK_STONE_DECORATIVE_BRICK);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 3), BlockName.BLOCK_STONE_DECORATIVE_BRICK);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 4), BlockName.BLOCK_STONE_DECORATIVE_PATTERNMOSS);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 5), BlockName.BLOCK_STONE_DECORATIVE_PATTERNMOSS);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 6), BlockName.BLOCK_STONE_DECORATIVE_PATTERN);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 7), BlockName.BLOCK_STONE_DECORATIVE_PATTERN);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 8), BlockName.BLOCK_STONE_DECORATIVE_DARK);
+    	LanguageRegistry.addName(new ItemStack(blockStoneDecorative, 1, 9), BlockName.BLOCK_STONE_DECORATIVE_DARK);
+    	LanguageRegistry.addName(blockArtifactCase, BlockName.BLOCK_ARTIFACTCASE);
+    	LanguageRegistry.addName(blockOrichalcumReceptacle, BlockName.BLOCK_ORICHALCUMRECEPTACLE);
     	
     	// Add in-game names for Items
-    	LanguageRegistry.addName(new ItemStack(itemArtifact, 1, 0), RefStrings.ITEM_ARTIFACT_WHITE);
-    	LanguageRegistry.addName(new ItemStack(itemArtifact, 1, 1), RefStrings.ITEM_ARTIFACT_BLACK);
-    	LanguageRegistry.addName(new ItemStack(itemArtifact, 1, 2), RefStrings.ITEM_ARTIFACT_GOLD);
-    	LanguageRegistry.addName(new ItemStack(itemArtifact, 1, 3), RefStrings.ITEM_ARTIFACT_RED);
-    	LanguageRegistry.addName(new ItemStack(itemArtifact, 1, 4), RefStrings.ITEM_ARTIFACT_GREEN);
-    	LanguageRegistry.addName(new ItemStack(itemArtifact, 1, 5), RefStrings.ITEM_ARTIFACT_BLUE);
-    	LanguageRegistry.addName(itemDiviningStone, RefStrings.ITEM_DIVININGSTONE);
-    	LanguageRegistry.addName(new ItemStack(itemMisc, 1, 0), RefStrings.ITEM_ORICHALCUM);
-    	LanguageRegistry.addName(new ItemStack(itemMisc, 1, 1), RefStrings.ITEM_FOCUSINGCRYSTAL);
-    	LanguageRegistry.addName(new ItemStack(itemMisc, 1, 2), RefStrings.ITEM_KEYFRAGMENT);
-    	LanguageRegistry.addName(new ItemStack(itemMisc, 1, 3), RefStrings.ITEM_KEY);
+    	LanguageRegistry.addName(new ItemStack(itemArtifact, 1, 0), ItemName.ITEM_ARTIFACT_WHITE);
+    	LanguageRegistry.addName(new ItemStack(itemArtifact, 1, 1), ItemName.ITEM_ARTIFACT_BLACK);
+    	LanguageRegistry.addName(new ItemStack(itemArtifact, 1, 2), ItemName.ITEM_ARTIFACT_GOLD);
+    	LanguageRegistry.addName(new ItemStack(itemArtifact, 1, 3), ItemName.ITEM_ARTIFACT_RED);
+    	LanguageRegistry.addName(new ItemStack(itemArtifact, 1, 4), ItemName.ITEM_ARTIFACT_GREEN);
+    	LanguageRegistry.addName(new ItemStack(itemArtifact, 1, 5), ItemName.ITEM_ARTIFACT_BLUE);
+    	LanguageRegistry.addName(itemDiviningStone, ItemName.ITEM_DIVININGSTONE);
+    	LanguageRegistry.addName(new ItemStack(itemMisc, 1, 0), ItemName.ITEM_ORICHALCUM);
+    	LanguageRegistry.addName(new ItemStack(itemMisc, 1, 1), ItemName.ITEM_FOCUSINGCRYSTAL);
+    	LanguageRegistry.addName(new ItemStack(itemMisc, 1, 2), ItemName.ITEM_KEYFRAGMENT);
+    	LanguageRegistry.addName(new ItemStack(itemMisc, 1, 3), ItemName.ITEM_KEY);
     }
 
     @EventHandler

@@ -15,18 +15,42 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import artifactmod.ArtifactMod;
 import artifactmod.item.ItemMisc;
-import artifactmod.ref.RefStrings;
+import artifactmod.ref.ModInfo;
 import artifactmod.tileentity.TileEntityOrichalcumReceptacle;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockOrichalcumReceptacle extends Block implements ITileEntityProvider {
 	
-	private Icon[] icons;
+	/**
+	 * Icons for the sides of the block, representing fuel level
+	 */
+	private Icon[] fuelIcons;
+	
+	/**
+	 * Icons for the top and bottom sides, the top indicates activity state
+	 */
+	private Icon iconTopOff,
+		iconTopOn,
+		iconBottom;
 
 	public BlockOrichalcumReceptacle(int id, Material par2Material) {
 		super(id, par2Material);
 		this.setCreativeTab(CreativeTabs.tabBlock);
+	}
+	
+	/**
+	 * Triggers from a nearby block update; used to respond to redstone signal.
+	 */
+	@Override
+	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
+		if (par1World.isBlockIndirectlyGettingPowered(par2, par3, par4)) {
+			TileEntity te = par1World.getBlockTileEntity(par2, par3, par4);
+			if (te instanceof TileEntityOrichalcumReceptacle) {
+				TileEntityOrichalcumReceptacle tile = (TileEntityOrichalcumReceptacle) te;
+				tile.isActive = true;
+			}
+		}
 	}
 	
 	/**
@@ -43,16 +67,16 @@ public class BlockOrichalcumReceptacle extends Block implements ITileEntityProvi
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
-		icons = new Icon[8];
+		fuelIcons = new Icon[5];
 		
 		// Register the 5 charge states
-		for (int i = 0; i < 5; i++) {
-			String tmp = RefStrings.MOD_ID + ":" + (this.getUnlocalizedName().substring(5) + i);
-			icons[i] = par1IconRegister.registerIcon(tmp);
+		for (int i = 0; i < fuelIcons.length; i++) {
+			String tmp = ModInfo.MOD_ID + ":" + (this.getUnlocalizedName().substring(5) + i);
+			fuelIcons[i] = par1IconRegister.registerIcon(tmp);
 		}
-		icons[5] = par1IconRegister.registerIcon(RefStrings.MOD_ID + ":" + (this.getUnlocalizedName().substring(5) + "top"));
-		icons[6] = par1IconRegister.registerIcon(RefStrings.MOD_ID + ":" + (this.getUnlocalizedName().substring(5) + "bottom"));
-		icons[7] = par1IconRegister.registerIcon(RefStrings.MOD_ID + ":" + (this.getUnlocalizedName().substring(5) + "topOff"));
+		iconTopOn = par1IconRegister.registerIcon(ModInfo.MOD_ID + ":" + (this.getUnlocalizedName().substring(5) + "top"));
+		iconBottom = par1IconRegister.registerIcon(ModInfo.MOD_ID + ":" + (this.getUnlocalizedName().substring(5) + "bottom"));
+		iconTopOff = par1IconRegister.registerIcon(ModInfo.MOD_ID + ":" + (this.getUnlocalizedName().substring(5) + "topOff"));
 	}
 	
 	/**
@@ -78,6 +102,9 @@ public class BlockOrichalcumReceptacle extends Block implements ITileEntityProvi
 		return false;
 	}
 	
+	/**
+	 * Triggers when the block is placed, used to determine the correct direction to face the block.
+	 */
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
 		if (par5EntityLivingBase instanceof EntityPlayer) {
@@ -96,23 +123,25 @@ public class BlockOrichalcumReceptacle extends Block implements ITileEntityProvi
 		TileEntity te = par1IBlockAccess.getBlockTileEntity(par2, par3, par4);
 		int max = 0;
 		int fuel = 0;
+		boolean active = false;
 		if (te != null) {
 			TileEntityOrichalcumReceptacle tile = (TileEntityOrichalcumReceptacle) te;
 			max = tile.maxFuel;
 			fuel = tile.getFuelLevel();
+			active = tile.isActive;
 		}
 		switch(side) {
 			case 0:		// Bottom side
-				return icons[6];
+				return iconBottom;
 			case 1:		// Top side
-				if (fuel > 0) return icons[5];	// 1-100%
-				return icons[7];				// 0%
+				if (active) return iconTopOn;
+				return iconTopOff;
 			default:	// Sides
-				if (fuel > (max * 0.75)) return icons[0];	// 76-100%
-				if (fuel > (max * 0.5)) return icons[1];	// 51-75%
-				if (fuel > (max * 0.25)) return icons[2];	// 26-50%
-				if (fuel > 0) return icons[3];				// 1-25%
-				return icons[4];							// 0%
+				if (fuel > (max * 0.75)) return fuelIcons[0];	// 76-100%
+				if (fuel > (max * 0.5)) return fuelIcons[1];	// 51-75%
+				if (fuel > (max * 0.25)) return fuelIcons[2];	// 26-50%
+				if (fuel > 0) return fuelIcons[3];				// 1-25%
+				return fuelIcons[4];							// 0%
 		}
 	}
 	
@@ -124,11 +153,11 @@ public class BlockOrichalcumReceptacle extends Block implements ITileEntityProvi
 	public Icon getIcon(int side, int metadata) {
 		switch(side) {
 			case 0:		// Bottom
-				return icons[6];
+				return iconBottom;
 			case 1:		// Top
-				return icons[7];
+				return iconTopOff;
 			default:	// Sides
-				return icons[4];
+				return fuelIcons[4];
 		}
 	}
 }

@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import artifactmod.ref.RefStrings;
+import artifactmod.ref.ModInfo;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -43,7 +43,7 @@ public class ItemMisc extends Item {
 		icons = new Icon[4];
 		
 		for (int i = 0; i < icons.length; i++) {
-			icons[i] = par1IconRegister.registerIcon(RefStrings.MOD_ID + ":" + (this.getUnlocalizedName().substring(5)) + i);
+			icons[i] = par1IconRegister.registerIcon(ModInfo.MOD_ID + ":" + (this.getUnlocalizedName().substring(5)) + i);
 		}
 	}
 	

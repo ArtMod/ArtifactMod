@@ -4,32 +4,29 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
-import artifactmod.ref.RefStrings;
+import artifactmod.ref.BlockName;
 
 public class TileEntityArtifactCase extends TileEntity implements IInventory {
 
-	private ItemStack[] inventory;
-	
-	public static final int INVENTORY_SIZE = 1;
+	private ItemStack artifact;
 	
 	public TileEntityArtifactCase() {
-		// Initialize inventory to the proper size
-		this.inventory = new ItemStack[INVENTORY_SIZE];
+		
 	}
 
 	@Override
 	public int getSizeInventory() {
-		return this.inventory.length;
+		return 1;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return this.inventory[i];
+		if (i > 0) return null;
+		return this.artifact;
 	}
 
 	/**
@@ -38,6 +35,7 @@ public class TileEntityArtifactCase extends TileEntity implements IInventory {
 	 */
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
+		if (slot > 0) return null;
 		ItemStack itemStack = getStackInSlot(slot);
 		if (itemStack != null) {
 			if (itemStack.stackSize <= amount) {	// If the amount is greater than or equal to what the slot has, remove the slot entirely
@@ -67,7 +65,8 @@ public class TileEntityArtifactCase extends TileEntity implements IInventory {
 	 */
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemStack) {
-		inventory[i] = itemStack;
+		if (i > 0) return;
+		artifact = itemStack;
 		if (itemStack != null && itemStack.stackSize > getInventoryStackLimit()) {
 			itemStack.stackSize = getInventoryStackLimit();
 		}
@@ -78,7 +77,7 @@ public class TileEntityArtifactCase extends TileEntity implements IInventory {
 	 */
 	@Override
 	public String getInvName() {
-		return RefStrings.BLOCK_ARTIFACTCASE;
+		return BlockName.BLOCK_ARTIFACTCASE;
 	}
 
 	/**
@@ -132,15 +131,8 @@ public class TileEntityArtifactCase extends TileEntity implements IInventory {
 	@Override
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);
-		NBTTagList tagList = nbtTagCompound.getTagList("Items");
-		inventory = new ItemStack[this.getSizeInventory()];
-		for (int i = 0; i < tagList.tagCount(); ++i) {
-			NBTTagCompound tagCompound = (NBTTagCompound) tagList.tagAt(i);
-			byte slot = tagCompound.getByte("Slot");
-			if (slot >= 0 && slot < inventory.length) {
-				inventory[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
-			}
-		}
+		NBTTagCompound tagCompound = (NBTTagCompound) nbtTagCompound.getCompoundTag("artifact");
+		artifact = ItemStack.loadItemStackFromNBT(tagCompound);
 	}
 
 	/**
@@ -149,15 +141,9 @@ public class TileEntityArtifactCase extends TileEntity implements IInventory {
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
-		NBTTagList tagList = new NBTTagList();
-		for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
-			if (inventory[currentIndex] != null) {
-				NBTTagCompound tagCompound = new NBTTagCompound();
-				tagCompound.setByte("Slot", (byte) currentIndex);
-				inventory[currentIndex].writeToNBT(tagCompound);
-				tagList.appendTag(tagCompound);
-			}
-		}
-		nbtTagCompound.setTag("Items", tagList);
+		NBTTagCompound compound = new NBTTagCompound();
+		if (artifact != null)
+			artifact.writeToNBT(compound);
+		nbtTagCompound.setCompoundTag("artifact", compound);
 	}
 }

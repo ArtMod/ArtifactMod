@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import artifactmod.ref.RefStrings;
+import artifactmod.ref.ModInfo;
 import artifactmod.tileentity.TileEntityArtifactCase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -40,6 +40,7 @@ public class ItemArtifact extends Item {
 		super(par1);
 		this.setCreativeTab(CreativeTabs.tabMisc);
 		this.setHasSubtypes(true);
+		this.setMaxStackSize(1);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -51,7 +52,7 @@ public class ItemArtifact extends Item {
 		icons = new Icon[6];
 		
 		for (int i = 0; i < icons.length; i++) {
-			icons[i] = par1IconRegister.registerIcon(RefStrings.MOD_ID + ":" + (this.getUnlocalizedName().substring(5)) + i);
+			icons[i] = par1IconRegister.registerIcon(ModInfo.MOD_ID + ":" + (this.getUnlocalizedName().substring(5)) + i);
 		}
 	}
 	

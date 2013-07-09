@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import artifactmod.ArtifactMod;
+import artifactmod.ref.Texture;
 import artifactmod.tileentity.TileEntityOrichalcumReceptacle;
 
 public class TileEntityOrichalcumReceptacleRenderer extends TileEntitySpecialRenderer {
@@ -42,7 +43,6 @@ public class TileEntityOrichalcumReceptacleRenderer extends TileEntitySpecialRen
 	 * @param z Z coordinate of the Tile Entity
 	 */
 	public void renderTileEntityAt(TileEntity tileEntity, double d, double d1, double d2, float f) {
-		// If you don't understand this code, don't worry. I don't either.
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)d, (float)d1, (float)d2);
 		TileEntityOrichalcumReceptacle tileEntityYour = (TileEntityOrichalcumReceptacle)tileEntity;
@@ -56,10 +56,11 @@ public class TileEntityOrichalcumReceptacleRenderer extends TileEntitySpecialRen
 				
 				EntityItem artifactEntity = new EntityItem(tileEntity.worldObj);
 				artifactEntity.setEntityItemStack(te.getStackInSlot(0));		// Set the itemstack to render
-				float scale = 1.5F;												// Make item larger to fill out the case
-				GL11.glTranslatef((float) d + 0.5F, (float) d1 + 0.35F, (float) d2 + 0.5F); // Center the item in the case
+				float scale = 2.0F;												// Make item larger to fill out the case
+				GL11.glTranslatef((float) d + 0.5F, (float) d1 + 1.0F, (float) d2 + 0.5F); // Center the item in the case
 				GL11.glScalef(scale, scale, scale);								// Apply scale transform
-				//customRenderItem.doRenderItem(artifactEntity, 0, 0, 0, 0, 0);	// Render the artifact
+				// @TODO Rendering item does not work properly
+				//customRenderItem.doRenderItem(artifactEntity, 0, 0, 0, 0, 0);	// Render the item
 				
 				GL11.glPopMatrix();
 				GL11.glEnable(GL11.GL_LIGHTING);	// Re-enable special lighting
@@ -70,6 +71,7 @@ public class TileEntityOrichalcumReceptacleRenderer extends TileEntitySpecialRen
 	}
 
 	public void renderBlockYour(TileEntityOrichalcumReceptacle tl, World world, int i, int j, int k, Block block) {
+		// If you don't understand this code, don't worry. I don't either.
 		Tessellator tessellator = Tessellator.instance;
 
 		// Set block brightness
@@ -81,14 +83,18 @@ public class TileEntityOrichalcumReceptacleRenderer extends TileEntitySpecialRen
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)l1, (float)l2); 
 
 		int dir = world.getBlockMetadata(i, j, k);
+		float rotationAngle = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
 
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0.5F, 0, 0.5F);
-		GL11.glRotatef(dir * (-90F), 0F, 1F, 0F);
-		GL11.glTranslatef(0.0F, 0.5F, 0.0F);
-		func_110628_a(new ResourceLocation("artifactmod:textures/TryTex.png"));
+		if (tl.isActive) GL11.glRotatef(dir * (-90F), 0F, 1F, 0F);
+		else GL11.glRotatef(rotationAngle, 0F, 1.0F, 0F);
+		GL11.glTranslatef(0.0F, 0.3F, 0.0F);
+		GL11.glDisable(GL11.GL_LIGHTING);	// Disable special lighting 
+		func_110628_a(new ResourceLocation(Texture.ARTIFACTHARNESS));
 		harness.render((Entity)null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 
 		GL11.glPopMatrix();
+		GL11.glEnable(GL11.GL_LIGHTING);	// Re-enable special lighting
 	}
 }
